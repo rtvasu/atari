@@ -13,7 +13,7 @@ export default function Home() {
         Phone: 
         <input className="border border-foreground px-2" />
       </label>
-      <button className="border border-foreground max-w-xs cursor-pointer hover:bg-pink-500">Sign Up</button>
+      <button className="border border-foreground max-w-xs cursor-pointer bg-fuchsia-400 hover:bg-fuchsia-500">Sign Up</button>
     </div>
   );
 }
