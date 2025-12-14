@@ -8,7 +8,7 @@ export default function Home() {
     return (
       <label className="max-w-xs flex justify-between">
         {label}:
-        <input autoFocus={autoFocus} className="border border-foreground px-2" />
+        <input autoFocus={autoFocus} className="border border-foreground px-2 rounded-sm" />
       </label>
     );
   };
@@ -18,7 +18,12 @@ export default function Home() {
       <Field label="Email" autoFocus />
       <Field label="Password" />
       <Field label="Phone" />
-      <button className="border border-foreground max-w-xs cursor-pointer bg-fuchsia-300 hover:bg-fuchsia-400">Sign Up</button>
+      <button className="
+        border border-foreground
+        rounded-sm max-w-xs cursor-pointer
+        bg-fuchsia-400 hover:bg-fuchsia-500">
+          Sign Up
+      </button>
     </div>
   );
 }
