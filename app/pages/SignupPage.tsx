@@ -1,0 +1,29 @@
+export default function SignUpPage() {
+  type FieldProps = {
+    label: string;
+    autoFocus?: boolean;
+  };
+
+  function Field({ label, autoFocus }: FieldProps) {
+    return (
+      <label className="max-w-xs flex justify-between">
+        {label}:
+        <input autoFocus={autoFocus} className="border border-foreground px-2 rounded-sm" />
+      </label>
+    );
+  };
+  
+  return (
+    <div className="flex flex-col gap-3 p-4">
+      <Field label="Email" autoFocus />
+      <Field label="Password" />
+      <Field label="Phone" />
+      <button className="
+        border border-foreground
+        rounded-sm max-w-xs cursor-pointer
+        bg-fuchsia-400 hover:bg-fuchsia-500">
+          Sign Up
+      </button>
+    </div>
+  );
+}
