@@ -1,5 +1,5 @@
-import SignUpPage from "./pages/SignupPage";
+import SignUp from "./signup/page";
 
 export default function Home() {
-  return <SignUpPage />;
+  return <SignUp />;
 }
