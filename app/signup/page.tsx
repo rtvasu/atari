@@ -5,6 +5,7 @@ export default function SignUp() {
     label: string;
     autoFocus?: boolean;
     type: string;
+    name: string;
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -29,20 +30,20 @@ export default function SignUp() {
     }
   }
 
-  function Field({ label, autoFocus, type }: FieldProps) {
+  function Field({ label, autoFocus, type, name }: FieldProps) {
     return (
       <label className="max-w-xs flex justify-between">
         {label}:
-        <input required autoFocus={autoFocus} type={type} className="border border-foreground px-2 rounded-sm" />
+        <input required autoFocus={autoFocus} type={type} name={name} className="border border-foreground px-2 rounded-sm" />
       </label>
     );
   };
   
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4">
-      <Field label="Email" type="email" autoFocus />
-      <Field label="Password" type="password" />
-      <Field label="Phone" type="tel" />
+      <Field label="Email" name="email" type="email" autoFocus />
+      <Field label="Password" name="password" type="password" />
+      <Field label="Phone" name="phone" type="tel" />
       <button onClick={() => {}} className="
         border border-foreground
         rounded-sm max-w-xs cursor-pointer
