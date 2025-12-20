@@ -8,6 +8,13 @@
       "when": 1766078499985,
       "tag": "0000_cloudy_monster_badoon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1766255730565,
+      "tag": "0001_petite_stellaris",
+      "breakpoints": true
     }
   ]
 }
