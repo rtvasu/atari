@@ -10,4 +10,5 @@ export const users = pgTable("users", {
 	phone: text().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+	passwordHash: text().notNull(),
 });

@@ -15,6 +15,13 @@
       "when": 1766255730565,
       "tag": "0001_petite_stellaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766257146199,
+      "tag": "0002_quick_tombstone",
+      "breakpoints": true
     }
   ]
 }
