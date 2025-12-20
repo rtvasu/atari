@@ -1,6 +1,6 @@
 'use client';
 
-export default function SignUp() {
+export default function Login() {
   type FieldProps = {
     label: string;
     autoFocus?: boolean;
@@ -12,13 +12,12 @@ export default function SignUp() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const res = await fetch('/api/signup', {
+    const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: formData.get('email'),
         password: formData.get('password'),
-        phone: Number(formData.get('phone')),
       }),
     });
 
@@ -43,12 +42,11 @@ export default function SignUp() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4">
       <Field label="Email" name="email" type="email" autoFocus />
       <Field label="Password" name="password" type="password" />
-      <Field label="Phone" name="phone" type="tel" />
       <button className="
         border border-foreground
         rounded-sm max-w-xs cursor-pointer
         bg-fuchsia-400 hover:bg-fuchsia-500">
-          Sign Up
+          Login
       </button>
     </form>
   );
