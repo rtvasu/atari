@@ -29,6 +29,13 @@
       "when": 1766823647981,
       "tag": "0003_far_terror",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1766824289282,
+      "tag": "0004_dapper_terror",
+      "breakpoints": true
     }
   ]
 }
