@@ -15,7 +15,7 @@ export const users = pgTable("users", {
 
 export const sessions = pgTable("sessions", {
 	id: uuid("id").defaultRandom().primaryKey(),
-	userid: serial("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+	userId: serial("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	revokedAt: timestamp("revoked_at", { withTimezone: true }),
