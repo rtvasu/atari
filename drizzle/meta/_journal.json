@@ -36,6 +36,13 @@
       "when": 1766824289282,
       "tag": "0004_dapper_terror",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1766974547993,
+      "tag": "0005_purple_lionheart",
+      "breakpoints": true
     }
   ]
 }

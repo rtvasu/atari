@@ -1,5 +1,5 @@
-import { pgTable, text, serial, timestamp, uuid } from "drizzle-orm/pg-core"
-import { sql } from "drizzle-orm"
+import { pgTable, text, serial, timestamp, uuid, index } from "drizzle-orm/pg-core"
+
 export const invites = pgTable("invites", {
 	email: text().primaryKey().notNull(),
 });
@@ -13,11 +13,18 @@ export const users = pgTable("users", {
 	passwordHash: text("password_hash").notNull(),
 });
 
-export const sessions = pgTable("sessions", {
+export const refreshTokens = pgTable("refresh_tokens", {
 	id: uuid("id").defaultRandom().primaryKey(),
 	userId: serial("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	revokedAt: timestamp("revoked_at", { withTimezone: true }),
-	sessionTokenHash: text("session_token_hash").notNull(),
-});
+	tokenHash: text("token_hash").notNull().unique(),
+	replacedByTokenId: uuid("replaced_by_token_id"),
+	lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+    userAgent: text("user_agent"),
+    ipAddress: text("ip_address"),
+}, (table) => [
+    index("refresh_tokens_user_id_idx").on(table.userId),
+    index("refresh_tokens_expires_at_idx").on(table.expiresAt),
+]);
