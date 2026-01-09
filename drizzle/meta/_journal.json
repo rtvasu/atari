@@ -12,36 +12,8 @@
     {
       "idx": 1,
       "version": "7",
-      "when": 1766255730565,
-      "tag": "0001_petite_stellaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1766257146199,
-      "tag": "0002_quick_tombstone",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1766823647981,
-      "tag": "0003_far_terror",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1766824289282,
-      "tag": "0004_dapper_terror",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1766974547993,
-      "tag": "0005_purple_lionheart",
+      "when": 1767924181735,
+      "tag": "0001_sour_jocasta",
       "breakpoints": true
     }
   ]

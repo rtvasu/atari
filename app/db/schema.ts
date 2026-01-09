@@ -1,11 +1,11 @@
-import { pgTable, text, serial, timestamp, uuid, index } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uuid, index } from "drizzle-orm/pg-core"
 
 export const invites = pgTable("invites", {
 	email: text().primaryKey().notNull(),
 });
 
 export const users = pgTable("users", {
-	id: serial("id").primaryKey(),
+	id: uuid("id").defaultRandom().primaryKey(),
 	username: text().notNull().unique(),
 	phone: text().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -15,7 +15,7 @@ export const users = pgTable("users", {
 
 export const refreshTokens = pgTable("refresh_tokens", {
 	id: uuid("id").defaultRandom().primaryKey(),
-	userId: serial("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	revokedAt: timestamp("revoked_at", { withTimezone: true }),
