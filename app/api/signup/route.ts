@@ -3,54 +3,63 @@ import { eq } from 'drizzle-orm';
 import db from '../../index';
 import { invites, users } from '../../db/schema';
 import { hashPassword } from '@/app/lib/password';
+import { AppError, toErrorResponse } from '@/app/lib/errors';
+import { parseJsonBody } from '@/app/lib/http';
+import { requireFields } from '@/app/lib/validate';
+import { isUniqueConstraintViolation } from '@/app/lib/db-errors';
+import { createSession } from '@/app/lib/session';
 
-const POSTGRES_UNIQUE_CONSTRAINT_VIOLATION = '23505';
+const USERS_USERNAME_UNIQUE_CONSTRAINT = 'users_username_unique';
 
 type SignUpBody = {
     username: string;
     password: string;
-    phone: number;
+    phone: string;
 }
 
-async function registerUser(body: SignUpBody) {
+async function assertInvited(email: string) {
+    const invitedUsers = await db.select().from(invites).where(eq(invites.email, email));
+    if (invitedUsers.length === 0) {
+        throw new AppError('You are not invited yet!', 403);
+    }
+}
+
+async function createUser(body: SignUpBody) {
     try {
         const hashedPassword = await hashPassword(body.password);
-        await db.insert(users).values({
+        const [ user ] = await db.insert(users).values({
             username: body.username,
-            phone: body.phone.toString(),
+            phone: body.phone,
             passwordHash: hashedPassword,
-        });
-    } catch (error: any) {
-        if (error.code === POSTGRES_UNIQUE_CONSTRAINT_VIOLATION) {
-            throw new Error('Username already exists');
-        } else if (error.message === 'Password is too long') {
+        }).returning();
+        return user;
+    } catch (error) {
+        if (error instanceof AppError) {
             throw error;
-        } else {
-            throw new Error('Registration failed due to a database error');
         }
+        if (isUniqueConstraintViolation(error, USERS_USERNAME_UNIQUE_CONSTRAINT)) {
+            throw new AppError('Username already exists', 409);
+        }
+        console.error('createUser failed:', error);
+        throw new AppError('Registration failed. Please try again later.', 500);
     }
 }
 
 export async function POST(request: Request) {
     try {
-        let body: SignUpBody = await request.json();
-        
-        if (!body.username || !body.password || !body.phone) {
-            return NextResponse.json({ ok: false, error: "Missing required fields: username, password, or phone" }, { status: 400 });
-        }
-        if (typeof body.username !== 'string' || typeof body.password !== 'string' || typeof body.phone !== 'number') {
-            return NextResponse.json({ ok: false, error: "Invalid data types for fields" }, { status: 400 });
-        }
-        
-        const email = body.username;
-        const user = await db.select().from(invites).where(eq(invites.email, email));
-        if (user.length > 0) {
-            await registerUser(body);
-            return NextResponse.json({ ok: true });
-        } else {
-            return NextResponse.json({ ok: false, error: "You are not invited yet!" }, { status: 403 });
-        }
-    } catch (error: any) {
-        return NextResponse.json({ ok: false, error: error.message || 'An unexpected error occurred' }, { status: 400 });
+        const body = requireFields<SignUpBody>(await parseJsonBody(request), {
+            username: 'string',
+            password: 'string',
+            phone: 'string',
+        });
+
+        await assertInvited(body.username);
+        const user = await createUser(body);
+        const accessToken = await createSession(user, request, {
+            failureMessage: 'Account created, but we could not start your session. Please log in.',
+        });
+        return NextResponse.json({ ok: true, accessToken });
+    } catch (error) {
+        return toErrorResponse(error);
     }
 }

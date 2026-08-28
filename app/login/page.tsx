@@ -1,12 +1,25 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
+type FieldProps = {
+  label: string;
+  autoFocus?: boolean;
+  type: string;
+  name: string;
+};
+
+function Field({ label, autoFocus, type, name }: FieldProps) {
+  return (
+    <label className="max-w-xs flex justify-between">
+      {label}:
+      <input required autoFocus={autoFocus} type={type} name={name} className="border border-foreground px-2 rounded-sm" />
+    </label>
+  );
+}
+
 export default function Login() {
-  type FieldProps = {
-    label: string;
-    autoFocus?: boolean;
-    type: string;
-    name: string;
-  };
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,17 +40,10 @@ export default function Login() {
       alert(data.error);
       return;
     }
+
+    router.push('/home');
   }
 
-  function Field({ label, autoFocus, type, name }: FieldProps) {
-    return (
-      <label className="max-w-xs flex justify-between">
-        {label}:
-        <input required autoFocus={autoFocus} type={type} name={name} className="border border-foreground px-2 rounded-sm" />
-      </label>
-    );
-  };
-  
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-4">
       <Field label="Email" name="email" type="email" autoFocus />
