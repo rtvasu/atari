@@ -8,6 +8,7 @@ import { parseJsonBody } from '@/app/lib/http';
 import { requireFields } from '@/app/lib/validate';
 import { isUniqueConstraintViolation } from '@/app/lib/db-errors';
 import { createSession } from '@/app/lib/session';
+import { normalizeEmail, assertValidEmail, normalizePhone, assertValidPhone, assertValidPassword } from '@/app/lib/sanitize';
 
 const USERS_USERNAME_UNIQUE_CONSTRAINT = 'users_username_unique';
 
@@ -52,6 +53,12 @@ export async function POST(request: Request) {
             password: 'string',
             phone: 'string',
         });
+
+        body.username = normalizeEmail(body.username);
+        body.phone = normalizePhone(body.phone);
+        assertValidEmail(body.username);
+        assertValidPhone(body.phone);
+        assertValidPassword(body.password);
 
         await assertInvited(body.username);
         const user = await createUser(body);

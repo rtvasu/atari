@@ -7,6 +7,7 @@ import { AppError, toErrorResponse } from '@/app/lib/errors';
 import { parseJsonBody } from '@/app/lib/http';
 import { requireFields } from '@/app/lib/validate';
 import { createSession } from '@/app/lib/session';
+import { normalizeEmail } from '@/app/lib/sanitize';
 
 type LoginBody = {
     username: string;
@@ -27,6 +28,8 @@ export async function POST(request: Request) {
             username: 'string',
             password: 'string',
         });
+
+        body.username = normalizeEmail(body.username);
 
         const user = await authenticate(body);
         const accessToken = await createSession(user, request);
